@@ -1,3 +1,6 @@
+# binary directories
+bin/
+
 # Logs
 logs
 *.log
