@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    div(class='row')
+        div(class='col col-lg-10 content')
+            form(id='register' action='/users/register' method='post')
+                div(class='form-group')
+                    label(for='register-username') Username
+                    input(type='text' class='form-control' id='register-username' name='username' placeholder='Give the desired username')
+                div(class='form-group')
+                    label(for='register-password') Password
+                    input(type='password' class='form-control' id='register-password' name='password')
+                div(class='form-group')
+                    label(for='register-password-verify') Verify password
+                    input(type='password' class='form-control' id='register-password-verify' name='password-verify')
+                button(type='submit' class='btn btn-primary') Sign up!
