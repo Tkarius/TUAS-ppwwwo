@@ -24,12 +24,12 @@ html
             li(class='nav-item')
               a(class='nav-link', href='#') Add comic
         ul(class='navbar-nav')
-          if user === undefined && user.username === undefined
+          if user === undefined || user.username === undefined
             li(class='nav-item')
               a(class='nav-link', href='/users/register')
                 span(class='glyphicon glyphicon-user') Sign up
             li(class='nav-item')
-              a(class='nav-link', href='#')
+              a(class='nav-link', href='/users/login')
                 span(class='glyphicon glyphicon-log-in') Login
           else
             li(class='nav-item')
