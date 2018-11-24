@@ -1,9 +1,12 @@
 doctype html
+var title = 'Comic Reviewer'
 html
   head
     title= title
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
     script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js')
+    script(src='https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js')
+    script(src='/javascripts/form_validation.js')
     link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
@@ -14,16 +17,16 @@ html
       div(class='collapse navbar-collapse', id='navbarSupportedContent')
         ul(class='navbar-nav mr-auto')
           li(class='nav-item active')
-            a(class='nav-link', href='#') Home
+            a(class='nav-link', href='/') Home
           li(class='nav-item')
             a(class='nav-link', href='#') Browse Comics
-          if user.username != undefined
+          if user != undefined && user.username != undefined
             li(class='nav-item')
               a(class='nav-link', href='#') Add comic
         ul(class='navbar-nav')
-          if user.username == undefined
+          if user != undefined && user.username == undefined
             li(class='nav-item')
-              a(class='nav-link', href='#')
+              a(class='nav-link', href='/users/register')
                 span(class='glyphicon glyphicon-user') Sign up
             li(class='nav-item')
               a(class='nav-link', href='#')

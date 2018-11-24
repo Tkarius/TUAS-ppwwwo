@@ -8,6 +8,7 @@ body {
 #top-banner {
   background-image: url("../assets/science.png");
   background-repeat: repeat;
+  margin-top: 10px;
 }
 
 #top-banner > .lead, .display-1 {
