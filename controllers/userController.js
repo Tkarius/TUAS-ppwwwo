@@ -11,7 +11,7 @@ exports.user_details = (req, res, next) => {
 exports.user_create_get = (req, res, next) => {
     //Render registration page.
     //Check if user is already logged in. If user already logged in, show error?
-    res.send('NOT IMPLEMENTED: user_create_get')
+    res.render('user_register', {pageTitle:'Register', pageDescription:'Register new user account'})
 }
 
 exports.user_create_post = (req, res, next) => {
