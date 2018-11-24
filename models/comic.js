@@ -16,7 +16,7 @@ var ComicSchema = new Schema(
 BookSchema
 .virtual('url')
 .get(function () {
-  return '/catalog/comic/' + this._id;
+  return '/comics/comic' + this._id;
 });
 
 //Export model

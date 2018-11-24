@@ -20,7 +20,7 @@ AuthorSchema
 AuthorSchema
 .virtual('url')
 .get(function () {
-  return '/catalog/author/' + this._id;
+  return '/comics/authors/author' + this._id;
 });
 
 

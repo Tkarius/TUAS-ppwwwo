@@ -14,7 +14,7 @@ var CommentSchema = new Schema(
 AuthorSchema
 .virtual('url')
 .get(function () {
-  return '/catalog/comment/' + this._id;
+  return '/comics/comment/' + this._id;
 });
 
 
