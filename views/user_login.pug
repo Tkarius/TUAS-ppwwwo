@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    div(class='row')
+        div(class='col col-lg-10 content')
+            form(id='login' action='/users/login' method='post')
+                div(class='form-group')
+                    label(for='login-username') Username
+                    input(type='text' class='form-control' id='login-username' name='username')
+                div(class='form-group')
+                    label(for='login-password') Password
+                    input(type='password' class='form-control' id='login-password' name='password')
+                button(type='submit' class='btn btn-primary') Login

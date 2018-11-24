@@ -1,8 +1,27 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-image: url("../assets/giftly.png");
+  background-repeat: repeat;
 }
 
-a {
-  color: #00B7FF;
+
+
+#top-banner {
+  background-image: url("../assets/science.png");
+  background-repeat: repeat;
+  margin-top: 10px;
+}
+
+#top-banner > .lead, .display-1 {
+  color: #f7f2ef
+}
+
+#navigation {
+  background-color: #f25602;
+}
+
+.content {
+  border-radius: 10px;
+  background-color: rgba(252, 241, 227, 0.6);
+  min-height: 100vh;
+  padding-top: 10px;
 }

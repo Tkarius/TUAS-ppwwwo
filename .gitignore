@@ -1,5 +1,9 @@
 
 
+# picture files
+*.png
+*.jpg
+
 # Logs
 logs
 *.log

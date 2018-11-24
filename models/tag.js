@@ -13,7 +13,7 @@ var TagSchema = new Schema(
 GenreSchema
 .virtual('url')
 .get(function () {
-  return '/catalog/tag/' + this._id;
+  return '/comics/tag/' + this._id;
 });
 
 
