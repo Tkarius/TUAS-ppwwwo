@@ -35,6 +35,7 @@ exports.comic_list = (req, res, next) => {
 exports.comic_details = (req, res, next) => {
     let comicId = req.params.id;
     //fetch comic details from mongoDB
+    //this here is just an example for testing the view
     let comic = {
         title: 'Testikomikki',
         description: 'testataan kuinka tää lähtee toimimaan. :P',
@@ -52,7 +53,15 @@ exports.comic_details = (req, res, next) => {
 exports.comic_add_get = (req, res, next) => {
     //renders page for adding a new comic. 
     //checks if user is logged in before rendering. If not, gives error
-    res.send('NOT IMPLEMENTED: comic_add_get');
+
+    //dummy object for testing the view! Fetch real data form MongoDB
+    let authors= [
+        {
+            _id:123,
+            name: 'Esteri Testeri'
+        }
+    ];
+    res.render('comic_add', {pageTitle:'Add new comic', pageDescription:'Add new comic for others to view and review!', authors:authors});
 }
 
 exports.comic_add_post = (req, res, next) => {

@@ -21,7 +21,7 @@ html
             a(class='nav-link', href='/comics/list') Browse Comics
           if user !== undefined && user.username !== undefined
             li(class='nav-item')
-              a(class='nav-link', href='#') Add comic
+              a(class='nav-link', href='/comics/add') Add comic
         ul(class='navbar-nav')
           if user === undefined || user.username === undefined
             li(class='nav-item')
