@@ -5,15 +5,15 @@ var Schema = mongoose.Schema;
 //Tag model 
 var TagSchema = new Schema(
   {
-    tag: {type: String, required: true, min: 3, max: 100},
+    name: {type: String, required: true, min: 3, max: 100},
   }
 );
 
 //Virtual for tags URL if we're gonna use them.
-GenreSchema
+TagSchema
 .virtual('url')
 .get(function () {
-  return '/comics/tag/' + this._id;
+  return '/tags/tag/' + this._id;
 });
 
 

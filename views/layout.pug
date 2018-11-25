@@ -19,6 +19,8 @@ html
             a(class='nav-link', href='/') Home
           li(class='nav-item')
             a(class='nav-link', href='/comics/list') Browse Comics
+          li(class='nav-item')
+            a(class='nav-link', href='/tags/list') Browse Tags
           if user !== undefined && user.username !== undefined
             li(class='nav-item')
               a(class='nav-link', href='/comics/add') Add comic

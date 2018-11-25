@@ -1,0 +1,20 @@
+extends layout
+
+block content
+
+  h1 Tag: #{tag.name}
+  
+  div(style='margin-left:20px;margin-top:20px')
+
+    h4 Comics
+    
+    dl
+    each comic in tag_comics
+      dt 
+        a(href=tag.url) #{tag.title}
+      dd #{tag.description}
+
+    else
+      p This tag has no comics
+  hr
+  
