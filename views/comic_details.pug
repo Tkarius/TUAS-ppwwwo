@@ -4,8 +4,8 @@ block content
     div(class='row')
         div(class='col col-lg-10 content')
             h1(class='display-3') #{comic.title}
-            img(src=comic.image, class='img-fluid')
-            p By: #{author.name}
+            p By: #{comic.author.name}
+            img(src=comic.image, class='img-fluid')       
             p Link: 
                 a(href=comic.source) #{comic.source}
             hr(class='my-4')

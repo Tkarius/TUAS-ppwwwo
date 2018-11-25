@@ -35,9 +35,18 @@ exports.comic_list = (req, res, next) => {
 exports.comic_details = (req, res, next) => {
     let comicId = req.params.id;
     //fetch comic details from mongoDB
-
+    let comic = {
+        title: 'Testikomikki',
+        description: 'testataan kuinka tää lähtee toimimaan. :P',
+        author: {
+            name: 'Esteri Testeri'
+        },
+        image: 'https://i.imgur.com/YehJgUZ.png',
+        url: '/comics/comic/123',
+        source: 'http://www.google.com',
+    }
     //renders page for comic details
-    res.send('NOT IMPLEMENTED: comic_details');
+    res.render('comic_details', {pageTitle:comic.title, pageDescription:'View comic details', comic:comic})
 }
 
 exports.comic_add_get = (req, res, next) => {

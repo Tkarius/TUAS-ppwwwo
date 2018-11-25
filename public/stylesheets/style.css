@@ -33,3 +33,7 @@ ul.listing {
 a.listing {
   text-decoration: none;
 }
+
+.clearBoth {
+  clear:both;
+}
