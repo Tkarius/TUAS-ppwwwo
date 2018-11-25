@@ -5,5 +5,5 @@ exports.viewIndex = (req, res, next) => {
     let user = {
         username:undefined
     }
-    res.render('index', {pageTitle:'Home', pageDescription:'Welcome to Comic Reviewer!', user:user});
+    res.render('index', {pageTitle:'Home', pageDescription:'Welcome to Comic Reviewer!', user:user, title:'Comic Reviewer'});
 }

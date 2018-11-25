@@ -3,18 +3,19 @@ extends layout
 block content
     div(class='row')
         div(class='col col-lg-10 content')
-            ul
+            ul(class='listing')
                 each comic in comics
                     li
-                        a(href=comic.url class='listing') #{comic.title}
+                        a(href=comic.url, class='listing') #{comic.title}
                         p #{comic.author.name}
+                    hr(class='my-4')
 
         div(class='col col-lg-2 side')
             form(id='sortcomics', action='/comics/list', method='get')
                 div(class='form-group')
-                    label(for='sorting')
+                    label(for='sorting') Sort comics by:
                     select(id='sorting', class='form-control', name='sorting')
                         option(value='name') Name
                         option(value='tag') Tag
                         option(value='author') Author
-                    button(type='submit', class='btn btn primary') Sort!
+                button(type='submit', class='btn btn-primary') Sort!

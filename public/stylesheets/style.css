@@ -25,3 +25,11 @@ body {
   min-height: 100vh;
   padding-top: 10px;
 }
+
+ul.listing {
+  list-style-type: none;
+}
+
+a.listing {
+  text-decoration: none;
+}

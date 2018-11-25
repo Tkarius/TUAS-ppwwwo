@@ -1,6 +1,7 @@
 exports.comic_list = (req, res, next) => {
     //render comics list with requested sorting
     //if no sorting is requested, sort alphabetically
+    //no idea as of now how to implement sorting by tag/author
     let sorting = req.params.sorting;
     if (!sorting) {
         sorting = 'name'
@@ -28,11 +29,13 @@ exports.comic_list = (req, res, next) => {
         }
     ]
 
-    res.render('comic_list', {pageTitle:'Browse Comics', pageDescription:'Browse added comics', comics:comics})
-    res.send('NOT IMPLEMENTED: comic_list');
+    res.render('comic_list', {pageTitle:'Browse Comics', pageDescription:'Browse added comics', comics:comics});
 }
 
 exports.comic_details = (req, res, next) => {
+    let comicId = req.params.id;
+    //fetch comic details from mongoDB
+
     //renders page for comic details
     res.send('NOT IMPLEMENTED: comic_details');
 }
