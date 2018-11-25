@@ -8,6 +8,7 @@ var ComicSchema = new Schema(
     author: {type: Schema.Types.ObjectId, ref: 'Author', required: true},
     description: {type: String, required: false},
     source: {type: String, required: true},
+    image: {type: String, required: true},
     tag: [{type: Schema.Types.ObjectId, ref: 'Tag', required: false}]
   }
 );
