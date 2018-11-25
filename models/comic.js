@@ -7,12 +7,12 @@ var ComicSchema = new Schema(
     title: {type: String, required: true},
     author: {type: Schema.Types.ObjectId, ref: 'Author', required: true},
     description: {type: String, required: false},
-    url: {type: String, required: false},
+    source: {type: String, required: true},
     tag: [{type: Schema.Types.ObjectId, ref: 'Tag', required: false}]
   }
 );
 
-// Virtual for book's URL - if we need this.
+// Virtual for comic's direct URL within the site - if we need this.
 BookSchema
 .virtual('url')
 .get(function () {
