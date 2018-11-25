@@ -1,0 +1,28 @@
+extends layout
+
+block content
+    div(class='row')
+        div(class='col col-lg-10 content')
+            form(id='addComic', action='/comics/add', method='post')
+                div(class='form-group row')
+                    label(for='comic-title') Title
+                    input(type="text", id='comic-title', name='comic-title')
+                div(class='form-group')
+                    label(for='comic-author') Author
+                    select(name='comic-author', class='form-control')
+                        each author in authors
+                            option(value=author._id) #{author.name}
+                div(class='form-group row')
+                    label(for='comic-source') Original source
+                    input(type="text", name='comic-source', id='comic-source')
+                div(class='form-group row')
+                    label(for='comic-image-url') External Image URL
+                    input(type="text", name='comic-image-url', id='comic-image-url')
+                div(class='form-group')
+                    label(for='comic-description') Description
+                    textarea(name="description", class='form-control', cols="10", rows="5")
+                //add tags? As we can have multiple tags this probably needs some more specialized handling
+                button(type='submit', class='btn btn-primary')
+
+                
+                
