@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    div(class='row')
+        div(class='col col-lg-10 content')
+            h1(class='display-3') #{comic.title}
+            p By: #{author.name}
+            p Link: 
+                a(href=comic.source) #{comic.source}
+            hr(class='my-4')
+            h3 Description:
+            p #{comic.description}

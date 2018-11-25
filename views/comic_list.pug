@@ -1,0 +1,20 @@
+extends layout
+
+block content
+    div(class='row')
+        div(class='col col-lg-10 content')
+            ul
+                each comic in comics
+                    li
+                        a(href=comic.url class='listing') #{comic.title}
+                        p #{comic.author.name}
+
+        div(class='col col-lg-2 side')
+            form(id='sortcomics', action='/comics/list', method='get')
+                div(class='form-group')
+                    label(for='sorting')
+                    select(id='sorting', class='form-control', name='sorting')
+                        option(value='name') Name
+                        option(value='tag') Tag
+                        option(value='author') Author
+                    button(type='submit', class='btn btn primary') Sort!
