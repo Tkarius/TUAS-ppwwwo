@@ -11,3 +11,11 @@ block content
             hr(class='my-4')
             h3 Description:
             p #{comic.description}
+            hr(class='my-4')
+            h4 Tags:
+            ul
+                each tag in comic
+                    li
+                        a(href=tag.url) #{comic.tag}
+                else
+                    li There are no tags for this comic yet.
