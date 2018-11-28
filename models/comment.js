@@ -10,8 +10,8 @@ var CommentSchema = new Schema(
   }
 );
 
-// Virtual for author's URL - if we need to use it.
-AuthorSchema
+// Virtual for comment's URL - if we need to use it.
+CommentSchema
 .virtual('url')
 .get(function () {
   return '/comics/comment/' + this._id;
