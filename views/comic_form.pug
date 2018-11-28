@@ -1,0 +1,36 @@
+extends layout
+
+block content
+    div(class='row')
+        div(class='col col-lg-10 content')
+            form(method='POST' action='')
+                div.form-group
+                    label(for='title') Title:
+                    input#title.form-control(type='text', placeholder='Name of comic' name='title' required='true' value=(undefined===comic ? '' : comic.title) )
+                div.form-group
+                    label(for='author') Author:
+                    input#author.form-control(type='text', placeholder='Name of author' name='author' required='true' value=(undefined===comic ? '' : comic.author) )
+                div.form-group
+                    label(for='description') Description:
+                    input#summary.form-control(type='textarea', placeholder='Description' name='description' required='true' value=(undefined===comic? '' : comic.description) )
+                div.form-group
+                    label(for='source') Source:
+                    input#source.form-control(type='text', placeholder='Comic source' name='source' required='true' value=(undefined===comic ? '' : comic.source) )
+                div.form-group
+                    label(for='image') Image:
+                    input#image.form-control(type='text', placeholder='Comic image' name='image' required='true' value=(undefined===comic ? '' : comic.image) )
+                div.form-group
+                    label Tags:
+                div
+                    for tag in tags
+                        div(style='display: inline; padding-right:10px;')
+                            input.checkbox-input(type='checkbox', name='tag', id=tag._id, value=tag._id, checked=tag.checked)
+                            label(for=tag._id) #{tag.name}
+                button.btn.btn-primary(type='submit') Submit
+
+            if errors 
+                ul
+                    for error in errors
+                        li!= error.msg
+                
+                

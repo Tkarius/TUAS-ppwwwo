@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var ComicSchema = new Schema(
   {
     title: {type: String, required: true},
-    author: {type: Schema.Types.ObjectId, ref: 'Author', required: true},
+    author: {type: String, required: true},
     description: {type: String, required: false},
     source: {type: String, required: true},
     image: {type: String, required: true},

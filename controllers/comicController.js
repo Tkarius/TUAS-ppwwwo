@@ -5,6 +5,9 @@ var Comment = require('../models/comment');
 
 var async = require('async');
 
+const { body, validationResult } = require('express-validator/check');
+const { sanitizeBody } = require('express-validator/filter');
+
 exports.comic_list = (req, res, next) => {
     //render comics list with requested sorting
     //if no sorting is requested, sort alphabetically
@@ -97,20 +100,80 @@ exports.comic_add_get = (req, res, next) => {
     //checks if user is logged in before rendering. If not, gives error
 
     //dummy object for testing the view! Fetch real data form MongoDB
-    let authors= [
-        {
-            _id:123,
-            name: 'Esteri Testeri'
-        }
-    ];
-    res.render('comic_add', {pageTitle:'Add new comic', pageDescription:'Add new comic for others to view and review!', authors:authors});
-}
+    async.parallel({
+        tags: function(callback) {
+            Tag.find(callback);
+        },
+    }, function(err, results) {
+        if (err) { return next(err); }
+        res.render('comic_form', { title: 'Create comic', tags: results.tags });
+    });
+};
 
-exports.comic_add_post = (req, res, next) => {
+
+exports.comic_add_post = (req, res, next) => [
     //adds a new comic
     //checks if user is logged in. If not, gives error
-    res.send('NOT IMPLEMENTED: comic_add_post');
-}
+
+    (req, res, next) => {
+        if(!(req.body.tags instanceof Array)){
+            if(typeof req.body.tag==='undefined')
+            req.body.tag=[];
+            else
+            req.body.tag=new Array(req.body.tag);
+        }
+        next();
+    },
+    
+    body('title', 'Title must not be empty').isLength({ min: 1 }).trim(),    
+    body('author', 'Author must not be empty').isLength({ min: 1 }).trim(),
+    body('source', 'Source must not be empty').isLength({ min: 1 }).trim(),
+    body('image', 'Image must not be empty').isLength({ min: 1 }).trim(),
+
+    sanitizeBody('*').trim().escape(),
+
+    (req, res, next) => {
+
+        const errors = validationResult(req);
+
+        var comic = new Comic(
+            {
+                title: req.body.title,
+                description: req.body.description,
+                author: req.body.author,
+                image: req.body.image,
+                source: req.body.source,
+                tags: req.body.tags,
+                rating: req.body.rating,
+            }
+        );
+            
+        if (!errors.isEmpty()) {
+            async.parallel({
+                tags: function(callback) {
+                    Tag.find(callback);
+                },
+            }, function(err, results) {
+                if (err) { return next(err); }
+
+                for (let i=0; i < results.tag.length; i++) {
+                    if (book.tag.indexOf(results.tag[i]._id) > -1) {
+                        results.tag[i].checked='true';
+                    }
+                }
+                res.render('comic_form', { title: 'Create Comic', tags: results.tag, comic: comic, errors: errors.array() });
+            });
+            return;
+        }
+        else {
+            comic.save(function (err) {
+                if (err) { return next(err); }
+                res.redirect(comic.url);
+            });
+        }
+   
+    }
+];
 
 exports.author_list = (req, res, next) => {
     //renders page with list of authors
