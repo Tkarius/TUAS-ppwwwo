@@ -35,3 +35,12 @@ a.listing {
 .clearBoth {
   clear:both;
 }
+
+.rating {
+  width: 100%;
+  position: absolute;
+}
+
+.rating > div > span {
+  font-size: 2em;
+}
