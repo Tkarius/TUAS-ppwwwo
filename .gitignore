@@ -1,4 +1,5 @@
-
+#client-side library files
+libraries/
 
 # picture files
 *.png
