@@ -50,7 +50,7 @@ exports.comic_list = (req, res, next) => {
 exports.comic_details = (req, res, next) => {
     let comicId = req.params.id;
     //fetch comic details from mongoDB
-    async.parallel({
+    /*async.parallel({
         comic: (callback) => {
 
             Comic.findById(comicId)
@@ -73,11 +73,11 @@ exports.comic_details = (req, res, next) => {
         console.log(results);
         // Successful, let's render this
         res.render('comic_details', {pageTitle:comic.title, pageDescription:'View comic details', comic:results_comic, comments:results_comments})
-    });
+    });*/
 
 
     //this here is just an example for testing the view
-    /*let comic = {
+    let comic = {
         title: 'Testikomikki',
         description: 'testataan kuinka tää lähtee toimimaan. :P',
         author: {
@@ -86,9 +86,10 @@ exports.comic_details = (req, res, next) => {
         image: 'https://i.imgur.com/YehJgUZ.png',
         url: '/comics/comic/123',
         source: 'http://www.google.com',
+        rating: 78
     }
     //renders page for comic details
-    res.render('comic_details', {pageTitle:comic.title, pageDescription:'View comic details', comic:comic})*/
+    res.render('comic_details', {pageTitle:comic.title, pageDescription:'View comic details', comic:comic})
 }
 
 exports.comic_add_get = (req, res, next) => {
