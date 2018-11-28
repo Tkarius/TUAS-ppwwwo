@@ -9,6 +9,7 @@ var ComicSchema = new Schema(
     description: {type: String, required: false},
     source: {type: String, required: true},
     image: {type: String, required: true},
+    rating: {type:Number, default:0, required: false},
     tag: [{type: Schema.Types.ObjectId, ref: 'Tag', required: false}]
   }
 );
