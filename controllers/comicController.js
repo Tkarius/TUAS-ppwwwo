@@ -1,3 +1,10 @@
+var Comic = require('../models/comic');
+var Author = require('../models/author');
+var Tag = require('../models/tag');
+var Comment = require('../models/comment');
+
+var async = require('async');
+
 exports.comic_list = (req, res, next) => {
     //render comics list with requested sorting
     //if no sorting is requested, sort alphabetically
@@ -7,6 +14,14 @@ exports.comic_list = (req, res, next) => {
         sorting = 'name'
     }
 
+    Comic.find({}, 'title author')
+        .populate('author')
+        .exec((err, comics) => {
+            if (err) { return next(err); }
+            //Successful, so render
+            res.render('comic_list', {pageTitle:'Browse Comics', pageDescription:'Browse added comics', comics:comics});
+        });
+    /*
     //placeholder object for testing
     let comics = [
         {
@@ -29,14 +44,40 @@ exports.comic_list = (req, res, next) => {
         }
     ]
 
-    res.render('comic_list', {pageTitle:'Browse Comics', pageDescription:'Browse added comics', comics:comics});
+    res.render('comic_list', {pageTitle:'Browse Comics', pageDescription:'Browse added comics', comics:comics});*/
 }
 
 exports.comic_details = (req, res, next) => {
     let comicId = req.params.id;
     //fetch comic details from mongoDB
+    async.parallel({
+        comic: (callback) => {
+
+            Comic.findById(comicId)
+                .populate('author')
+                .populate('tag')
+                .exec(callback);
+        },
+        comments: (callback) => {
+
+            Comment.find({ 'comic': comicId })
+                .exec(callback);
+        },
+    }, (err, results) => {
+        if (err) { return next(err); }
+        if (results.comic == null) { // No results :(
+            var err = new Error('Comic not found');
+            err.status = 404;
+            return next(err);
+        }
+        console.log(results);
+        // Successful, let's render this
+        res.render('comic_details', {pageTitle:comic.title, pageDescription:'View comic details', comic:results_comic, comments:results_comments})
+    });
+
+
     //this here is just an example for testing the view
-    let comic = {
+    /*let comic = {
         title: 'Testikomikki',
         description: 'testataan kuinka tää lähtee toimimaan. :P',
         author: {
@@ -47,7 +88,7 @@ exports.comic_details = (req, res, next) => {
         source: 'http://www.google.com',
     }
     //renders page for comic details
-    res.render('comic_details', {pageTitle:comic.title, pageDescription:'View comic details', comic:comic})
+    res.render('comic_details', {pageTitle:comic.title, pageDescription:'View comic details', comic:comic})*/
 }
 
 exports.comic_add_get = (req, res, next) => {
