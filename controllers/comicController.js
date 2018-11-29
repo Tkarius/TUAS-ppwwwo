@@ -1,9 +1,12 @@
 var Comic = require('../models/comic');
-var Author = require('../models/author');
+//var Author = require('../models/author');
 var Tag = require('../models/tag');
 var Comment = require('../models/comment');
 
 var async = require('async');
+var Entities = require('html-entities').AllHtmlEntities;
+
+const htmlEntities = new Entities();
 
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
@@ -11,8 +14,9 @@ const { sanitizeBody } = require('express-validator/filter');
 exports.comic_list = (req, res, next) => {
     //render comics list with requested sorting
     //if no sorting is requested, sort alphabetically
-    let sorting = req.params.sorting;
-    if (!sorting) {
+    let sorting = req.query.sorting;
+    console.log('Sorting: ' + sorting);
+    if (sorting === undefined) {
         sorting = 'title'
     }
 
@@ -52,8 +56,12 @@ exports.comic_details = (req, res, next) => {
             return next(err);
         }
         
-        results.comic.source = decodeURI(results.comic.source);
-        results.comic.image = decodeURI(results.comic.image);
+        //run html-entities decoder to all fields. Maybe we want to wrap this into a function?
+        results.comic.description = htmlEntities.decode(results.comic.description);
+        results.comic.author = htmlEntities.decode(results.comic.author);
+        results.comic.title = htmlEntities.decode(results.comic.title);
+        results.comic.source = htmlEntities.decode(results.comic.source);
+        results.comic.image = htmlEntities.decode(results.comic.image);
         console.log(results);
         // Successful, let's render this
         res.render('comic_details', {pageTitle:results.comic.title, pageDescription:'View comic details', comic:results.comic, comments:results.comments})
@@ -106,8 +114,8 @@ exports.comic_add_post = [
                 title: req.body.title,
                 description: req.body.description,
                 author: req.body.author,
-                image: encodeURI(req.body.image),
-                source: encodeURI(req.body.source),
+                image: req.body.image,
+                source: req.body.source,
                 tag: req.body.tag,
                 rating: req.body.rating,
             }
