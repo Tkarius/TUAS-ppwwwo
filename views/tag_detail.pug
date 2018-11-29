@@ -2,17 +2,15 @@ extends layout
 
 block content
 
-  h1 Tag: #{tag.name}
+  h1 Comics with tag: #[strong #{tag.name}]
   
   div(style='margin-left:20px;margin-top:20px')
-
-    h4 Comics
     
     dl
     each comic in tag_comics
       dt 
-        a(href=tag.url) #{tag.title}
-      dd #{tag.description}
+        a(href=comic.url) #{comic.title}
+      dd #{comic.description}
 
     else
       p This tag has no comics

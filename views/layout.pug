@@ -23,8 +23,9 @@ html
             a(class='nav-link', href='/comics/list') Browse Comics
           li(class='nav-item')
             a(class='nav-link', href='/tags/list') Browse Tags
-          li(class='nav-item')
-            a(class='nav-link', href='/tags/add') Add new tags
+          if user !== undefined && user.username !== undefined
+            li(class='nav-item')
+              a(class='nav-link', href='/tags/add') Add new tags
           if user !== undefined && user.username !== undefined
             li(class='nav-item')
               a(class='nav-link', href='/comics/add') Add comic
