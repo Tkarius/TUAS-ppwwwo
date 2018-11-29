@@ -9,7 +9,7 @@ var ComicSchema = new Schema(
     description: {type: String, required: false},
     source: {type: String, required: true},
     image: {type: String, required: true},
-    rating: {type:Number, default:0, required: false},
+    rating: [Number],
     tag: [{type: Schema.Types.ObjectId, ref: 'Tag', required: false}]
   }
 );
@@ -18,8 +18,18 @@ var ComicSchema = new Schema(
 ComicSchema
 .virtual('url')
 .get(function () {
-  return '/comics/comic' + this._id;
+  return '/comics/comic/' + this._id;
 });
+
+ComicSchema
+.virtual('averageRating')
+.get(()=>{
+  if (this.rating === undefined || this.rating.length < 1) {
+    return 0;
+  } else {
+    return average(this.rating);
+  }
+})
 
 //Export model
 module.exports = mongoose.model('Comic', ComicSchema);
