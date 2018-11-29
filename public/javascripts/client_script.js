@@ -19,5 +19,6 @@ $(function () {
 
 
         $('.comicRating').rate(ratingOptions);
+        //$('.comicRating').css({'width':'300px', 'height':'20px'}) //uncomment to override rater.js inline styles
     }
 });
