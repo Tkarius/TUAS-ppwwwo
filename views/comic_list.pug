@@ -7,7 +7,7 @@ block content
                 each comic in comics
                     li
                         a(href=comic.url, class='listing') #{comic.title}
-                        p #{comic.author.name}
+                        p #{comic.author}
                     hr(class='my-4')
 
         div(class='col col-lg-2 side')

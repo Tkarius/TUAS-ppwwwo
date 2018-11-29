@@ -16,8 +16,8 @@ block content
             hr(class='my-4')
             h4 Tags:
             ul
-                each tag in comic
+                each tag in comic.tag
                     li
-                        a(href=tag.url) #{comic.tag}
+                        a(href=tag.url) #{tag.name}
                 else
                     li There are no tags for this comic yet.
