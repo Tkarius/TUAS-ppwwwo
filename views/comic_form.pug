@@ -3,7 +3,7 @@ extends layout
 block content
     div(class='row')
         div(class='col col-lg-10 content')
-            form(method='POST' action='')
+            form(id='addComic' method='POST' action='/comics/add')
                 div.form-group
                     label(for='title') Title:
                     input#title.form-control(type='text', placeholder='Name of comic' name='title' required='true' value=(undefined===comic ? '' : comic.title) )
