@@ -4,8 +4,8 @@ block content
     div(class='row')
         div(class='col col-lg-10 content')
             h1(class='display-3') #{comic.title}
-            p By: #{comic.author.name}
-            div(class='rating', data-rating=comic.rating)
+            p By: #{comic.author}
+            div(class='rating', data-rating=comic.averageRating)
             div(class='clearBoth')
             img(src=comic.image, class='img-fluid')       
             p Link: 
