@@ -6,7 +6,7 @@ $(function () {
 
     console.log('More client side scripts loaded!');
     function loadComicRating() {
-        let rating = $('.rating').data('rating');
+        let rating = $('.comicRating').data('rating');
         console.log('Rating is: ' + rating);
         rating = rating/10;
         let ratingOptions = {
@@ -18,6 +18,6 @@ $(function () {
         };
 
 
-        $('.rating').rate(ratingOptions);
+        $('.comicRating').rate(ratingOptions);
     }
 });

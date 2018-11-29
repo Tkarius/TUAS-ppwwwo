@@ -36,11 +36,11 @@ a.listing {
   clear:both;
 }
 
-.rating {
+.comicRating {
   width: 100%;
   position: absolute;
 }
 
-.rating > div > span {
+.comicRating > div > span {
   font-size: 2em;
 }
