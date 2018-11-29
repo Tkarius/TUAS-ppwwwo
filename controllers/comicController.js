@@ -11,53 +11,31 @@ const { sanitizeBody } = require('express-validator/filter');
 exports.comic_list = (req, res, next) => {
     //render comics list with requested sorting
     //if no sorting is requested, sort alphabetically
-    //no idea as of now how to implement sorting by tag/author
     let sorting = req.params.sorting;
     if (!sorting) {
-        sorting = 'name'
+        sorting = 'title'
     }
 
-    Comic.find({}, 'title author')
-        .populate('author')
+    let user = {
+        username: 'Esteri'
+    }
+
+    Comic.find({})
+        .sort(sorting)
         .exec((err, comics) => {
             if (err) { return next(err); }
             //Successful, so render
-            res.render('comic_list', {pageTitle:'Browse Comics', pageDescription:'Browse added comics', comics:comics});
+            res.render('comic_list', {pageTitle:'Browse Comics', pageDescription:'Browse added comics', comics:comics, user:user});
         });
-    /*
-    //placeholder object for testing
-    let comics = [
-        {
-            title: 'Testikomikki',
-            decription: 'testataan',
-            author: {
-                name: 'Esteri Testeri'
-            },
-            url: '/comics/comic/123',
-            source: 'http://www.google.com',
-        },
-        {
-            title: 'AlltheTesti',
-            decription: 'testataan lisää',
-            author: {
-                name: 'Antero Mertaranta'
-            },
-            url: '/comics/comic/1234',
-            source: 'http://www.google.com',
-        }
-    ]
-
-    res.render('comic_list', {pageTitle:'Browse Comics', pageDescription:'Browse added comics', comics:comics});*/
 }
 
 exports.comic_details = (req, res, next) => {
     let comicId = req.params.id;
     //fetch comic details from mongoDB
-    /*async.parallel({
+    async.parallel({
         comic: (callback) => {
 
             Comic.findById(comicId)
-                .populate('author')
                 .populate('tag')
                 .exec(callback);
         },
@@ -73,26 +51,13 @@ exports.comic_details = (req, res, next) => {
             err.status = 404;
             return next(err);
         }
+        
+        results.comic.source = decodeURI(results.comic.source);
+        results.comic.image = decodeURI(results.comic.image);
         console.log(results);
         // Successful, let's render this
-        res.render('comic_details', {pageTitle:comic.title, pageDescription:'View comic details', comic:results_comic, comments:results_comments})
-    });*/
-
-
-    //this here is just an example for testing the view
-    let comic = {
-        title: 'Testikomikki',
-        description: 'testataan kuinka tää lähtee toimimaan. :P',
-        author: {
-            name: 'Esteri Testeri'
-        },
-        image: 'https://i.imgur.com/YehJgUZ.png',
-        url: '/comics/comic/123',
-        source: 'http://www.google.com',
-        rating: 78
-    }
-    //renders page for comic details
-    res.render('comic_details', {pageTitle:comic.title, pageDescription:'View comic details', comic:comic})
+        res.render('comic_details', {pageTitle:results.comic.title, pageDescription:'View comic details', comic:results.comic, comments:results.comments})
+    });
 }
 
 exports.comic_add_get = (req, res, next) => {
@@ -111,13 +76,13 @@ exports.comic_add_get = (req, res, next) => {
 };
 
 
-exports.comic_add_post = (req, res, next) => [
+exports.comic_add_post = [
     //adds a new comic
     //checks if user is logged in. If not, gives error
 
     (req, res, next) => {
-        if(!(req.body.tags instanceof Array)){
-            if(typeof req.body.tag==='undefined')
+        if(!(req.body.tag instanceof Array)){
+            if(typeof req.body.tag === 'undefined')
             req.body.tag=[];
             else
             req.body.tag=new Array(req.body.tag);
@@ -141,9 +106,9 @@ exports.comic_add_post = (req, res, next) => [
                 title: req.body.title,
                 description: req.body.description,
                 author: req.body.author,
-                image: req.body.image,
-                source: req.body.source,
-                tags: req.body.tags,
+                image: encodeURI(req.body.image),
+                source: encodeURI(req.body.source),
+                tag: req.body.tag,
                 rating: req.body.rating,
             }
         );
@@ -157,7 +122,7 @@ exports.comic_add_post = (req, res, next) => [
                 if (err) { return next(err); }
 
                 for (let i=0; i < results.tag.length; i++) {
-                    if (book.tag.indexOf(results.tag[i]._id) > -1) {
+                    if (comic.tag.indexOf(results.tag[i]._id) > -1) {
                         results.tag[i].checked='true';
                     }
                 }
