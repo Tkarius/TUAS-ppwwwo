@@ -17,4 +17,6 @@ router.get('/authors/list', comicController.author_list);
 
 router.get('/authors/author/:id', comicController.author_details);
 
+router.post('/addcomment', comicController.comment_add_post);
+
 module.exports = router;

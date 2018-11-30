@@ -21,3 +21,18 @@ block content
                         a(href=tag.url) #{tag.name}
                 else
                     li There are no tags for this comic yet.
+                    
+            form(method='POST' action='/comics/addcomment')
+                div.form-group
+                    label(for='content') Comment:
+                    input#content.form-control(type='textarea', placeholder='Write a comment' name='content' required='true' value=(undefined===comment ? '' : comment.content),)
+                    input(type='hidden' name='username' value=user.username)
+                    input(type='hidden' name='comicid' value=comic._id)
+                button.btn.btn-primary(type='submit') Submit
+            
+            each comment in comments
+                hr(class='my-4')
+                div
+                    p #{comment.content} - #{comment.user} - #{comment.time_posted}
+            else
+                li Be the first one to comment!

@@ -4,19 +4,12 @@ var Schema = mongoose.Schema;
 
 var CommentSchema = new Schema(
   {
-    user: {type: Schema.Types.ObjectId, ref: 'User', required: true},
+    user: {type: String, required: true},
     time_posted: {type: Date, required: true},
-    comment: {type: String, required: true, min: 1},    
+    content: {type: String, required: true, min: 1},
+    comic: [{ type: Schema.Types.ObjectId, ref: 'Comic', required: true }]
   }
 );
-
-// Virtual for comment's URL - if we need to use it.
-CommentSchema
-.virtual('url')
-.get(function () {
-  return '/comics/comment/' + this._id;
-});
-
 
 //Export model
 module.exports = mongoose.model('Comment', CommentSchema);

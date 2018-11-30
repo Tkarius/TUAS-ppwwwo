@@ -2,6 +2,7 @@ var Comic = require('../models/comic');
 //var Author = require('../models/author');
 var Tag = require('../models/tag');
 var Comment = require('../models/comment');
+var User = require('../models/user');
 
 var async = require('async');
 var Entities = require('html-entities').AllHtmlEntities;
@@ -37,6 +38,12 @@ exports.comic_list = (req, res, next) => {
 
 exports.comic_details = (req, res, next) => {
     let comicId = req.params.id;
+    //THIS IS A PLACEHOLDER USER TO TEST COMMENTING FUNCTION
+    var user = new User({
+        username : 'esterizio',
+        password : 'esterizio'
+    });
+    
     //fetch comic details from mongoDB
     async.parallel({
         comic: (callback) => {
@@ -50,6 +57,12 @@ exports.comic_details = (req, res, next) => {
             Comment.find({ 'comic': comicId })
                 .exec(callback);
         },
+        //ALSO PLACEHOLDER CODE FOR TESTING COMMENTING
+        user: (callback) => {
+
+            callback(null,user);
+        },
+                
     }, (err, results) => {
         if (err) { return next(err); }
         if (results.comic == null) { // No results :(
@@ -64,9 +77,11 @@ exports.comic_details = (req, res, next) => {
         results.comic.title = htmlEntities.decode(results.comic.title);
         results.comic.source = htmlEntities.decode(results.comic.source);
         results.comic.image = htmlEntities.decode(results.comic.image);
+        
         console.log(results);
-        // Successful, let's render this
-        res.render('comic_details', {pageTitle:results.comic.title, pageDescription:'View comic details', comic:results.comic, comments:results.comments})
+        
+        // Successful, let's render this - AT THE END OF THIS LINE == RESULTS.USER IS ALSO PLACEHOLDER
+        res.render('comic_details', {pageTitle:results.comic.title, pageDescription:'View comic details', comic:results.comic, comments:results.comments, user:results.user})
     });
 }
 
@@ -159,3 +174,45 @@ exports.author_details = (req, res, next) => {
     //renders page with author details and listing of comics by the author
     res.send('NOT IMPLEMENTED: author_details');
 }
+
+// Handle comment create on POST.
+exports.comment_add_post = [
+
+    // Validate that the comment field is not empty.
+    body('content', 'Comment content required').isLength({ min: 1 }).trim(),
+
+    // Sanitize (trim and escape) the name field.
+    sanitizeBody('content').trim().escape(),
+
+    // Process request after validation and sanitization.
+    (req, res, next) => {
+
+        var currentTime = new Date();
+        // Create a comment object with escaped and trimmed data.
+        var comment = new Comment(
+          { 
+              user: req.body.username,
+              time_posted: currentTime,
+              content: req.body.content,
+              comic: req.body.comicid
+
+            }
+        );
+
+        //redirect back to comic detail page after posting comment
+        Comic.findById(req.body.comicid, function(err,redirectComic){
+
+        
+        
+        console.log(redirectComic);
+        comment.save(function (err) {
+            if (err) { return next(err); }
+            // Comment saved. Redirect to tag detail page.
+            res.redirect(redirectComic.url);
+          });
+        
+        return;
+    });
+        
+    }
+];
