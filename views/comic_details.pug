@@ -32,8 +32,6 @@ block content
             
             each comment in comments
                 hr(class='my-4')  
-                p #{comment.user} - #{comment.time_posted}
+                p #{comment.user} - #{comment.time_posted_formatted}
                 textarea#comments(class='carea', type='textarea') #{comment.content}
-            else
-                li Be the first one to comment!
             hr(class='my-4')
