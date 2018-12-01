@@ -44,3 +44,29 @@ a.listing {
 .comicRating > div > span {
   font-size: 2em;
 }
+
+.area {
+  width: 40%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  resize: none;
+  align-content: flex-start;
+}
+
+.carea {
+  width: 50%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #d9d9d9;
+  font-size: 16px;
+  resize: none;
+  align-content: flex-start;
+ }
