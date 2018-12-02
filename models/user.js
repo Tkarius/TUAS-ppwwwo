@@ -31,7 +31,7 @@ UserSchema
       }
       else if (!user) {
         var noSuchUserError = new Error("No such user.");
-        err.status = 401;
+        noSuchUserError.status = 401;
         return callback(noSuchUserError);
       }
 
@@ -63,4 +63,5 @@ UserSchema
 
 
 //Export model
-module.exports = mongoose.model('User', UserSchema);
+var User = mongoose.model('User', UserSchema);
+module.exports = User;
