@@ -232,3 +232,93 @@ exports.comment_add_post = [
 
     }
 ];
+
+exports.comic_update_get = function(req, res, next) {
+
+    async.parallel({
+        comic: function(callback) {
+            Comic.findById(req.params.id).populate('tag').exec(callback);
+        },
+        tags: function(callback) {
+            Tag.find(callback);
+        },
+        }, function(err, results) {
+            if (err) { return next(err); }
+            if (results.comic==null) {
+                var err = new Error('Comic not found');
+                err.status = 404;
+                return next(err);
+            }
+        
+            for (var all_tag_iter = 0; all_tag_iter < results.tags.length; all_tag_iter++) {
+                for (var comic_tag_iter = 0; comic_tag_iter < results.comic.tag.length; comic_tag_iter++) {
+                    if (results.tags[all_tag_iter]._id.toString()==results.comic.tag[comic_tag_iter]._id.toString()) {
+                        results.tags[all_tag_iter].checked='true';
+                    }
+                }
+            }
+            res.render('comic_form', { title: 'Update Comic', tags: results.tags, comic: results.comic }); 
+        });
+};
+
+exports.comic_update_post = [
+
+    (req, res, next) => {
+        if(!(req.body.tag instanceof Array)){
+            if(typeof req.body.tag==='undefined')
+            req.body.tag=[];
+            else
+            req.body.tag=new Array(req.body.tag);
+        }
+        next();
+    },
+
+    body('title', 'Title must not be empty').isLength({ min: 1 }).trim(),    
+    body('author', 'Author must not be empty').isLength({ min: 1 }).trim(),
+    body('source', 'Source must not be empty').isLength({ min: 1 }).trim(),
+    body('image', 'Image must not be empty').isLength({ min: 1 }).trim(),
+
+    sanitizeBody('*').trim().escape(),
+
+    (req, res, next) => {
+        
+        const errors = validationResult(req);
+        
+        var comic = new Comic(
+            {
+                title: req.body.title,
+                description: req.body.description,
+                author: req.body.author,
+                image: req.body.image,
+                source: req.body.source,
+                tag: (typeof req.body.tag==='undefined') ? [] : req.body.tag,
+                rating: req.body.rating,
+                _id:req.params.id
+            });
+
+        if (!errors.isEmpty()) {
+           
+            async.parallel({
+                tags: function(callback) {
+                    Tag.find(callback);
+                },
+            }, function(err, results) {
+                if (err) { return next(err); }
+
+                for (let i=0; i < results.tag.length; i++) {
+                    if (comic.tag.indexOf(results.tag[i]._id) > -1) {
+                        results.tag[i].checked='true';
+                    }
+                }
+                res.render('comic_form', { title: 'Update Comic', tags: results.tag, comic: comic, errors: error.array() });
+            });
+            return;
+        } 
+        else {
+            Comic.findByIdAndUpdate(req.params.id, comic, {}, function (err, thecomic) {
+                if (err) { return next(err); }
+                res.redirect(thecomic.url); 
+            });
+        }
+    }         
+];

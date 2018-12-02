@@ -21,7 +21,9 @@ block content
                         a(href=tag.url) #{tag.name}
                 else
                     li There are no tags for this comic yet.
-                    
+            hr(class='my-4')
+            p
+                a(href=comic.url+'/update') Update Comic        
             form(method='POST' action='/comics/addcomment')
                 div.form-group
                     label(for='content') Comment:
