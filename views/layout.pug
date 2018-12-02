@@ -17,7 +17,7 @@ html
         span(class='navbar-toggler-icon')
       div(class='collapse navbar-collapse', id='navbarSupportedContent')
         ul(class='navbar-nav mr-auto')
-          li(class='nav-item active')
+          li(class='nav-item')
             a(class='nav-link', href='/') Home
           li(class='nav-item')
             a(class='nav-link', href='/comics/list') Browse Comics
@@ -38,6 +38,9 @@ html
               a(class='nav-link', href='/users/login')
                 span(class='glyphicon glyphicon-log-in') Login
           else
+            li(class='nav-item')
+              a(class='nav-link', href='#')
+                  span Logged in as: #{user.username}
             li(class='nav-item')
               a(class='nav-link', href='/users/logout')
                 span(class='glyphicon glyphicon-log-in') Logout

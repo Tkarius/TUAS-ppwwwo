@@ -40,6 +40,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(addUserInformation);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/comics', comicsRouter);
@@ -60,5 +61,15 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+function addUserInformation(req, res, next) {
+  console.log(req.session)
+  let user = {
+    username: req.session.userName,
+    userId: req.session.userId
+  }
+  req.user = user;
+  next();
+}
 
 module.exports = app;

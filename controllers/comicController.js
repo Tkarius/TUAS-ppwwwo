@@ -21,10 +21,6 @@ exports.comic_list = (req, res, next) => {
         sorting = 'title'
     }
 
-    let user = {
-        username: 'Esteri'
-    }
-
     Comic.find({})
         .sort(sorting)
         .exec((err, comics) => {
@@ -32,17 +28,12 @@ exports.comic_list = (req, res, next) => {
             comics.author = htmlEntities.decode(comics.author);
             comics.title = htmlEntities.decode(comics.title);
             //Successful, so render
-            res.render('comic_list', { pageTitle: 'Browse Comics', pageDescription: 'Browse added comics', comics: comics, user: user });
+            res.render('comic_list', { pageTitle: 'Browse Comics', pageDescription: 'Browse added comics', comics: comics, user: req.user });
         });
 }
 
 exports.comic_details = (req, res, next) => {
     let comicId = req.params.id;
-    //THIS IS A PLACEHOLDER USER TO TEST COMMENTING FUNCTION
-    var user = new User({
-        username: 'esterizio',
-        password: 'esterizio'
-    });
 
     //fetch comic details from mongoDB
     async.parallel({
@@ -56,12 +47,7 @@ exports.comic_details = (req, res, next) => {
 
             Comment.find({ 'comic': comicId })
                 .exec(callback);
-        },
-        //ALSO PLACEHOLDER CODE FOR TESTING COMMENTING
-        user: (callback) => {
-
-            callback(null, user);
-        },
+        }
 
     }, (err, results) => {
         if (err) { return next(err); }
@@ -80,32 +66,32 @@ exports.comic_details = (req, res, next) => {
 
         let averageRating = 0;
 
-        for(value of results.comic.rating) {
-            averageRating+=value;
+        for (value of results.comic.rating) {
+            averageRating += value;
         }
 
         averageRating = averageRating / results.comic.rating.length
-    
+
         results.comic.averageRating = averageRating;
         console.log(results);
 
         // Successful, let's render this - AT THE END OF THIS LINE == RESULTS.USER IS ALSO PLACEHOLDER
-        res.render('comic_details', { pageTitle: results.comic.title, pageDescription: 'View comic details', comic: results.comic, comments: results.comments, user: results.user })
+        res.render('comic_details', { pageTitle: results.comic.title, pageDescription: 'View comic details', comic: results.comic, comments: results.comments, user: req.user })
     });
 }
 
 exports.comic_add_get = (req, res, next) => {
-    //renders page for adding a new comic. 
-    //checks if user is logged in before rendering. If not, gives error
-
-    //dummy object for testing the view! Fetch real data form MongoDB
+    console.log(req.user);
+    if (req.user == undefined || req.user.userId == undefined) {
+        next(new Error('This feature is only for logged-in users!'));
+    };
     async.parallel({
         tags: function (callback) {
             Tag.find(callback);
         },
     }, function (err, results) {
         if (err) { return next(err); }
-        res.render('comic_form', { title: 'Create comic', tags: results.tags });
+        res.render('comic_form', { title: 'Create comic', tags: results.tags, user: req.user });
     });
 };
 
@@ -114,6 +100,11 @@ exports.comic_add_post = [
     //adds a new comic
     //checks if user is logged in. If not, gives error
 
+    (req, res, next) => {
+        if (req.user == undefined || req.user.userId == undefined) {
+            next(new Error('This feature is only for logged-in users!'));
+        }
+    },
     (req, res, next) => {
         if (!(req.body.tag instanceof Array)) {
             if (typeof req.body.tag === 'undefined')
@@ -160,7 +151,7 @@ exports.comic_add_post = [
                         results.tag[i].checked = 'true';
                     }
                 }
-                res.render('comic_form', { title: 'Create Comic', tags: results.tag, comic: comic, errors: errors.array() });
+                res.render('comic_form', { title: 'Create Comic', tags: results.tag, comic: comic, errors: errors.array(), user: req.user });
             });
             return;
         }
@@ -183,12 +174,12 @@ exports.comic_rate_post = (req, res, next) => {
         console.log(comic);
         let comicRating = 0;
 
-        for(value of comic.rating) {
-            comicRating+=value;
+        for (value of comic.rating) {
+            comicRating += value;
         }
 
         comicRating = comicRating / comic.rating.length
-    
+
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify({ rating: comicRating }));
     });
@@ -197,6 +188,11 @@ exports.comic_rate_post = (req, res, next) => {
 // Handle comment create on POST.
 exports.comment_add_post = [
 
+    (req, res, next) => {
+        if (req.user == undefined || req.user.userId == undefined) {
+            next(new Error('This feature is only for logged-in users!'));
+        }
+    },
     // Validate that the comment field is not empty.
     body('content', 'Comment content required').isLength({ min: 1 }).trim(),
 
