@@ -21,19 +21,24 @@ exports.user_create_post = (req, res, next) => {
         }
 
         User.create(newUser, function(error, user) {
-            console.log("DEBUG: In new user creation.")
             if (error) {
                 return next(error);
             }
             else {
                 // Use the MongoDb index as unique userID
                 req.session.userId = user._id;
+                req.session.userName = user.username;
+                console.log("Debug: " + req.session.userName);
+                let userObject = {
+                    username: req.session.userName,
+                    userId: req.session.userId
+                }
+                req.user = userObject;
                 return res.redirect('/');
             }
         });
     }
     else {
-        console.log("DEBUG: something was missing in user registration!")
         var missingInputError = new Error("Required field is empty.");
         missingInputError.status = 400;
         return next(missingInputError);
@@ -77,7 +82,6 @@ exports.user_logout_get = (req, res, next) => {
                 next(err);
             }
             else {
-                console.log("DEBUG: Session destroyed. Logout successful?")
                 return res.redirect("/");
             }
         });
