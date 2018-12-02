@@ -17,5 +17,9 @@ router.get('/comic/:id', comicController.comic_details);
 
 router.post('/addcomment', comicController.comment_add_post);
 
+router.get('/comic/:id/update', comicController.comic_update_get);
+
+router.post('/comic/:id/update', comicController.comic_update_post);
+
 
 module.exports = router;

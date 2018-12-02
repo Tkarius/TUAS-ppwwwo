@@ -1,10 +1,6 @@
 
 var User = require('../models/user.js')
 
-exports.user_list = (req, res, next) => {
-    res.send('respond with a resource');
-};
-
 exports.user_create_get = (req, res, next) => {
     //Render registration page.
     //Check if user is already logged in. If user already logged in, show error?
@@ -12,8 +8,6 @@ exports.user_create_get = (req, res, next) => {
 }
 
 exports.user_create_post = (req, res, next) => {
-    //validate registration form. If valid create new user. If not valid, render registration page with error info
-
     if (req.body.password && req.body.confirmPass && req.body.username) {
         var newUser = {
             username: req.body.username,

@@ -3,6 +3,7 @@ extends layout
 block content
     div(class='row')
         div(class='col col-lg-10 content')
+            h1(class='display-3') #{title}
             form(id='addComic' method='POST' action='/comics/add')
                 div.form-group
                     label(for='title') Title:
