@@ -20,23 +20,36 @@ exports.user_create_post = (req, res, next) => {
             password: req.body.password,
         }
 
-        User.create(newUser, function(error, user) {
-            if (error) {
-                return next(error);
-            }
-            else {
-                // Use the MongoDb index as unique userID
-                req.session.userId = user._id;
-                req.session.userName = user.username;
-                console.log("Debug: " + req.session.userName);
-                let userObject = {
-                    username: req.session.userName,
-                    userId: req.session.userId
+        User.findOne({ username: req.body.username })
+        .exec(function(err, existingUser) {
+          if (err) {
+            return next(err);
+          }
+          if (existingUser) {
+            var signUpError = new Error("Username is already in use.");
+            signUpError.status = 401;
+            return next(signUpError);
+          }
+          else {
+            User.create(newUser, function(error, user) {
+                if (error) {
+                    return next(error);
                 }
-                req.user = userObject;
-                return res.redirect('/');
-            }
-        });
+                else {
+                    // Use the MongoDb index as unique userID
+                    req.session.userId = user._id;
+                    req.session.userName = user.username;
+                    console.log("Debug: " + req.session.userName);
+                    let userObject = {
+                        username: req.session.userName,
+                        userId: req.session.userId
+                    }
+                    req.user = userObject;
+                    return res.redirect('/');
+                }
+            });
+          }
+        });    
     }
     else {
         var missingInputError = new Error("Required field is empty.");
