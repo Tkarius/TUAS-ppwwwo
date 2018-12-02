@@ -7,6 +7,7 @@ block content
             p By: !{comic.author}
             div(class='comicRating', data-rating=comic.averageRating, data-comicid = comic._id)
             div(class='clearBoth')
+            hr(class='my-4')
             img(src=comic.image, class='img-fluid')       
             p Link: 
                 a(href=comic.source) #{comic.source}
