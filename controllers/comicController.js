@@ -25,8 +25,10 @@ exports.comic_list = (req, res, next) => {
         .sort(sorting)
         .exec((err, comics) => {
             if (err) { return next(err); }
-            comics.author = htmlEntities.decode(comics.author);
-            comics.title = htmlEntities.decode(comics.title);
+            for (let comic of comics) {
+                comic.author = htmlEntities.decode(comic.author);
+                comic.title = htmlEntities.decode(comic.title);
+            }          
             //Successful, so render
             res.render('comic_list', { pageTitle: 'Browse Comics', pageDescription: 'Browse added comics', comics: comics, user: req.user });
         });

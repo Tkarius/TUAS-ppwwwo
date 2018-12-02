@@ -1,6 +1,9 @@
 var Tag = require('../models/tag');
 var Comic = require('../models/comic');
 var async = require('async');
+var Entities = require('html-entities').AllHtmlEntities;
+
+const htmlEntities = new Entities();
 
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
@@ -39,6 +42,9 @@ exports.tag_detail = function (req, res, next) {
             var err = new Error('Tag not found');
             err.status = 404;
             return next(err);
+        }
+        for (let comic of results.tag_comics) {
+            comic.description = htmlEntities.decode(comic.description);
         }
         // Successful, so render.
         res.render('tag_detail', { title: 'Tag Detail', tag: results.tag, tag_comics: results.tag_comics, user: req.user, pageTitle:results.tag.name, pageDescription:'Tag details' });
