@@ -17,6 +17,10 @@ body {
   background-color: #f25602;
 }
 
+.form-group > input, .form-group > textarea {
+  max-width: 500px;
+}
+
 .content {
   border-radius: 10px;
   background-color: rgba(252, 241, 227, 0.6);
