@@ -68,7 +68,7 @@ exports.comic_details = (req, res, next) => {
 
         let averageRating = 0;
 
-        for (value of results.comic.rating) {
+        for (let value of results.comic.rating) {
             averageRating += value;
         }
 
