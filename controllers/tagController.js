@@ -58,6 +58,7 @@ exports.tag_create_post = [
         if (req.user == undefined || req.user.userId == undefined) {
             next(new Error('This feature is only for logged-in users!'));
         }
+        next();
     },
 
     // Validate that the name field is not empty.

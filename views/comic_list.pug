@@ -2,7 +2,7 @@ extends layout
 
 block content
     div(class='row')
-        div(class='col-md-10 order-lg-1 order-xl-1 order-sm-12 order-xs-12 order-md-12 content')
+        div(class='col-md-10 order-lg-1 order-xl-1 order-md-12 order-sm-12 order-xs-12 content')
             ul(class='listing')
                 each comic in comics
                     li
@@ -10,7 +10,7 @@ block content
                         p #{comic.author}
                     hr(class='my-4')
 
-        div(class='col-md-2 order-md-1 order-sm-1 order-xs-1')
+        div(class='col-md-2 order-lg-2 order-xl-2 order-md-1 order-sm-1 order-xs-1')
             form(id='sortcomics', action='/comics/list', method='get')
                 div(class='form-group')
                     label(for='sorting') Sort comics by:

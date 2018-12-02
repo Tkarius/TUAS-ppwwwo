@@ -104,6 +104,7 @@ exports.comic_add_post = [
         if (req.user == undefined || req.user.userId == undefined) {
             next(new Error('This feature is only for logged-in users!'));
         }
+        next();
     },
     (req, res, next) => {
         if (!(req.body.tag instanceof Array)) {
@@ -192,6 +193,7 @@ exports.comment_add_post = [
         if (req.user == undefined || req.user.userId == undefined) {
             next(new Error('This feature is only for logged-in users!'));
         }
+        next();
     },
     // Validate that the comment field is not empty.
     body('content', 'Comment content required').isLength({ min: 1 }).trim(),

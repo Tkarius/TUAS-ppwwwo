@@ -12,7 +12,7 @@ block content
                     input#author.form-control(type='text', placeholder='Name of author' name='author' required='true' value=(undefined===comic ? '' : comic.author) )
                 div.form-group
                     label(for='description') Description:
-                    input#summary.form-control(type='textarea', placeholder='Description' name='description' required='true' value=(undefined===comic? '' : comic.description) )
+                    textarea#summary.form-control(cols="2", rows="2", placeholder='Description' name='description' required='true' value=(undefined===comic? '' : comic.description) )
                 div.form-group
                     label(for='source') Source:
                     input#source.form-control(type='text', placeholder='Comic source' name='source' required='true' value=(undefined===comic ? '' : comic.source) )
