@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
 
+
 var ComicSchema = new Schema(
   {
     title: { type: String, required: true },
@@ -21,15 +22,18 @@ ComicSchema
     return '/comics/comic/' + this._id;
   });
 
+  /*
 ComicSchema
   .virtual('averageRating')
   .get(() => {
     if (this.rating === undefined || this.rating.length < 1) {
+      console.log('yhyy, I has no ratings');
       return 0;
     } else {
+      console.log('rating: ' + average(this.rating));
       return average(this.rating);
     }
-  })
+  })*/
 
 //Export model
 module.exports = mongoose.model('Comic', ComicSchema);

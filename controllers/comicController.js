@@ -32,7 +32,7 @@ exports.comic_list = (req, res, next) => {
             comics.author = htmlEntities.decode(comics.author);
             comics.title = htmlEntities.decode(comics.title);
             //Successful, so render
-            res.render('comic_list', {pageTitle:'Browse Comics', pageDescription:'Browse added comics', comics:comics, user:user});
+            res.render('comic_list', { pageTitle: 'Browse Comics', pageDescription: 'Browse added comics', comics: comics, user: user });
         });
 }
 
@@ -40,10 +40,10 @@ exports.comic_details = (req, res, next) => {
     let comicId = req.params.id;
     //THIS IS A PLACEHOLDER USER TO TEST COMMENTING FUNCTION
     var user = new User({
-        username : 'esterizio',
-        password : 'esterizio'
+        username: 'esterizio',
+        password: 'esterizio'
     });
-    
+
     //fetch comic details from mongoDB
     async.parallel({
         comic: (callback) => {
@@ -60,9 +60,9 @@ exports.comic_details = (req, res, next) => {
         //ALSO PLACEHOLDER CODE FOR TESTING COMMENTING
         user: (callback) => {
 
-            callback(null,user);
+            callback(null, user);
         },
-                
+
     }, (err, results) => {
         if (err) { return next(err); }
         if (results.comic == null) { // No results :(
@@ -70,18 +70,27 @@ exports.comic_details = (req, res, next) => {
             err.status = 404;
             return next(err);
         }
-        
+
         //run html-entities decoder to all fields. Maybe we want to wrap this into a function?
         results.comic.description = htmlEntities.decode(results.comic.description);
         results.comic.author = htmlEntities.decode(results.comic.author);
         results.comic.title = htmlEntities.decode(results.comic.title);
         results.comic.source = htmlEntities.decode(results.comic.source);
         results.comic.image = htmlEntities.decode(results.comic.image);
-        
+
+        let averageRating = 0;
+
+        for(value of results.comic.rating) {
+            averageRating+=value;
+        }
+
+        averageRating = averageRating / results.comic.rating.length
+    
+        results.comic.averageRating = averageRating;
         console.log(results);
-        
+
         // Successful, let's render this - AT THE END OF THIS LINE == RESULTS.USER IS ALSO PLACEHOLDER
-        res.render('comic_details', {pageTitle:results.comic.title, pageDescription:'View comic details', comic:results.comic, comments:results.comments, user:results.user})
+        res.render('comic_details', { pageTitle: results.comic.title, pageDescription: 'View comic details', comic: results.comic, comments: results.comments, user: results.user })
     });
 }
 
@@ -91,10 +100,10 @@ exports.comic_add_get = (req, res, next) => {
 
     //dummy object for testing the view! Fetch real data form MongoDB
     async.parallel({
-        tags: function(callback) {
+        tags: function (callback) {
             Tag.find(callback);
         },
-    }, function(err, results) {
+    }, function (err, results) {
         if (err) { return next(err); }
         res.render('comic_form', { title: 'Create comic', tags: results.tags });
     });
@@ -106,16 +115,16 @@ exports.comic_add_post = [
     //checks if user is logged in. If not, gives error
 
     (req, res, next) => {
-        if(!(req.body.tag instanceof Array)){
-            if(typeof req.body.tag === 'undefined')
-            req.body.tag=[];
+        if (!(req.body.tag instanceof Array)) {
+            if (typeof req.body.tag === 'undefined')
+                req.body.tag = [];
             else
-            req.body.tag=new Array(req.body.tag);
+                req.body.tag = new Array(req.body.tag);
         }
         next();
     },
-    
-    body('title', 'Title must not be empty').isLength({ min: 1 }).trim(),    
+
+    body('title', 'Title must not be empty').isLength({ min: 1 }).trim(),
     body('author', 'Author must not be empty').isLength({ min: 1 }).trim(),
     body('source', 'Source must not be empty').isLength({ min: 1 }).trim(),
     body('image', 'Image must not be empty').isLength({ min: 1 }).trim(),
@@ -137,18 +146,18 @@ exports.comic_add_post = [
                 rating: req.body.rating,
             }
         );
-            
+
         if (!errors.isEmpty()) {
             async.parallel({
-                tags: function(callback) {
+                tags: function (callback) {
                     Tag.find(callback);
                 },
-            }, function(err, results) {
+            }, function (err, results) {
                 if (err) { return next(err); }
 
-                for (let i=0; i < results.tag.length; i++) {
+                for (let i = 0; i < results.tag.length; i++) {
                     if (comic.tag.indexOf(results.tag[i]._id) > -1) {
-                        results.tag[i].checked='true';
+                        results.tag[i].checked = 'true';
                     }
                 }
                 res.render('comic_form', { title: 'Create Comic', tags: results.tag, comic: comic, errors: errors.array() });
@@ -161,18 +170,28 @@ exports.comic_add_post = [
                 res.redirect(comic.url);
             });
         }
-   
+
     }
 ];
 
-exports.author_list = (req, res, next) => {
-    //renders page with list of authors
-    res.send('NOT IMPLEMENTED: author_list');
-}
+exports.comic_rate_post = (req, res, next) => {
+    let comicId = req.params.id;
+    console.log('Comic id: ' + comicId);
+    let newRating = req.body.value;
+    Comic.findByIdAndUpdate(comicId, { $push: { rating: newRating } }, { new: true }, (err, comic) => {
+        if (err) { return next(err); }
+        console.log(comic);
+        let comicRating = 0;
 
-exports.author_details = (req, res, next) => {
-    //renders page with author details and listing of comics by the author
-    res.send('NOT IMPLEMENTED: author_details');
+        for(value of comic.rating) {
+            comicRating+=value;
+        }
+
+        comicRating = comicRating / comic.rating.length
+    
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({ rating: comicRating }));
+    });
 }
 
 // Handle comment create on POST.
@@ -190,26 +209,26 @@ exports.comment_add_post = [
         var currentTime = new Date();
         // Create a comment object with escaped and trimmed data.
         var comment = new Comment(
-          { 
-              user: req.body.username,
-              time_posted: currentTime,
-              content: req.body.content,
-              comic: req.body.comicid
+            {
+                user: req.body.username,
+                time_posted: currentTime,
+                content: req.body.content,
+                comic: req.body.comicid
 
             }
         );
 
         //redirect back to comic detail page after posting comment
-        Comic.findById(req.body.comicid, function(err,redirectComic){
-            
-        comment.save(function (err) {
-            if (err) { return next(err); }
-            // Comment saved. Redirect to tag detail page.
-            res.redirect(redirectComic.url);
-          });
-        
-        return;
-    });
-        
+        Comic.findById(req.body.comicid, function (err, redirectComic) {
+
+            comment.save(function (err) {
+                if (err) { return next(err); }
+                // Comment saved. Redirect to tag detail page.
+                res.redirect(redirectComic.url);
+            });
+
+            return;
+        });
+
     }
 ];
