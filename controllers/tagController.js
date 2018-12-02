@@ -13,7 +13,7 @@ exports.tag_list = function (req, res, next) {
         .exec(function (err, list_tags) {
             if (err) { return next(err); }
             // Successful, so render.
-            res.render('tag_list', { title: 'Tag List', list_tags: list_tags, user: req.user });
+            res.render('tag_list', { title: 'Tag List', list_tags: list_tags, user: req.user, pageTitle:'Tag List', pageDescription:'All the tags added to the service, click to see details' });
         });
 
 };
@@ -41,14 +41,14 @@ exports.tag_detail = function (req, res, next) {
             return next(err);
         }
         // Successful, so render.
-        res.render('tag_detail', { title: 'Tag Detail', tag: results.tag, tag_comics: results.tag_comics, user: req.user });
+        res.render('tag_detail', { title: 'Tag Detail', tag: results.tag, tag_comics: results.tag_comics, user: req.user, pageTitle:results.tag.name, pageDescription:'Tag details' });
     });
 
 };
 
 // Display tag create form on GET.
 exports.tag_create_get = function (req, res, next) {
-    res.render('tag_form', { title: 'Create Tag', user:req.user });
+    res.render('tag_form', { title: 'Create Tag', user:req.user, pageTitle:'Create tag', pageDescription:'Add new tags to organize comics by' });
 };
 
 // Handle Tag create on POST.
@@ -80,7 +80,7 @@ exports.tag_create_post = [
 
         if (!errors.isEmpty()) {
             // There are errors. Render the form again with sanitized values/error messages.
-            res.render('tag_form', { title: 'Create Tag', tag: tag, errors: errors.array(), user: req.user });
+            res.render('tag_form', { title: 'Create Tag', tag: tag, errors: errors.array(), user: req.user, pageTitle:'Create tag', pageDescription:'Add new tags to organize comics by'});
             return;
         }
         else {

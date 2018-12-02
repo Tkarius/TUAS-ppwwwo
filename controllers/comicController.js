@@ -91,7 +91,7 @@ exports.comic_add_get = (req, res, next) => {
         },
     }, function (err, results) {
         if (err) { return next(err); }
-        res.render('comic_form', { title: 'Create comic', tags: results.tags, user: req.user });
+        res.render('comic_form', { title: 'Create comic', tags: results.tags, user: req.user, pageTitle:'Create comic', pageDescription:'Add new comics for others to enjoy and review' });
     });
 };
 
@@ -151,7 +151,7 @@ exports.comic_add_post = [
                         results.tag[i].checked = 'true';
                     }
                 }
-                res.render('comic_form', { title: 'Create Comic', tags: results.tag, comic: comic, errors: errors.array(), user: req.user });
+                res.render('comic_form', { title: 'Create Comic', tags: results.tag, comic: comic, errors: errors.array(), user: req.user, pageTitle:'Create Comic', pageDescription:'Add new comics for others to enjoy and review' });
             });
             return;
         }
