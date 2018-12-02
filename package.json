@@ -7,7 +7,7 @@
     "devstart": "node ./bin/www"
   },
   "dependencies": {
-    "bcrypt": "^3.0.2",
+    "bcrypt": "https://github.com/kelektiv/node.bcrypt.js.git#master",
     "connect-mongo": "^2.0.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
