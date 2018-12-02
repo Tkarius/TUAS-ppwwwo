@@ -23,7 +23,8 @@ block content
                     li There are no tags for this comic yet.
             hr(class='my-4')
             p
-                a(href=comic.url+'/update') Update Comic        
+                a(href=comic.url+'/update') Update Comic
+            hr(class='my-4')            
             form(method='POST' action='/comics/addcomment')
                 div.form-group
                     label(for='content') Comment:

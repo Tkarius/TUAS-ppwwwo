@@ -250,6 +250,12 @@ exports.comic_update_get = function(req, res, next) {
                 return next(err);
             }
         
+            results.comic.description = htmlEntities.decode(results.comic.description);
+            results.comic.author = htmlEntities.decode(results.comic.author);
+            results.comic.title = htmlEntities.decode(results.comic.title);
+            results.comic.source = htmlEntities.decode(results.comic.source);
+            results.comic.image = htmlEntities.decode(results.comic.image);
+
             for (var all_tag_iter = 0; all_tag_iter < results.tags.length; all_tag_iter++) {
                 for (var comic_tag_iter = 0; comic_tag_iter < results.comic.tag.length; comic_tag_iter++) {
                     if (results.tags[all_tag_iter]._id.toString()==results.comic.tag[comic_tag_iter]._id.toString()) {
