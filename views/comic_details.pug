@@ -3,8 +3,8 @@ extends layout
 block content
     div(class='row')
         div(class='col col-lg-10 content')
-            h1(class='display-3') #{comic.title}
-            p By: #{comic.author}
+            h1(class='display-3') !{comic.title}
+            p By: !{comic.author}
             div(class='comicRating', data-rating=comic.averageRating, data-comicid = comic._id)
             div(class='clearBoth')
             img(src=comic.image, class='img-fluid')       
@@ -12,7 +12,7 @@ block content
                 a(href=comic.source) #{comic.source}
             hr(class='my-4')
             h3 Description:
-            p #{comic.description}
+            p !{comic.description}
             hr(class='my-4')
             h4 Tags:
             ul
@@ -33,5 +33,5 @@ block content
             each comment in comments
                 hr(class='my-4')  
                 p #{comment.user} - #{comment.time_posted_formatted}
-                textarea#comments(class='carea', type='textarea') #{comment.content}
+                textarea#comments(class='carea', type='textarea') !{comment.content}
             hr(class='my-4')
