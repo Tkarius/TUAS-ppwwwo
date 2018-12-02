@@ -201,10 +201,7 @@ exports.comment_add_post = [
 
         //redirect back to comic detail page after posting comment
         Comic.findById(req.body.comicid, function(err,redirectComic){
-
-        
-        
-        console.log(redirectComic);
+            
         comment.save(function (err) {
             if (err) { return next(err); }
             // Comment saved. Redirect to tag detail page.
