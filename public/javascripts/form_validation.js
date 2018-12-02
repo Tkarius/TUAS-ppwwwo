@@ -14,7 +14,7 @@ $(function () {
                 required: true,
                 minlength: 8
             },
-            'password-verify': {
+            'confirmPass': {
                 equalTo: '#register-password'
             }
         }
