@@ -263,7 +263,7 @@ exports.comic_update_get = function(req, res, next) {
                     }
                 }
             }
-            res.render('comic_form', { title: 'Update Comic', tags: results.tags, comic: results.comic }); 
+            res.render('comic_form', { title: 'Update Comic', tags: results.tags, comic: results.comic, user: req.user }); 
         });
 };
 
